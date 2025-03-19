@@ -1,0 +1,29 @@
+
+
+% open image and mask nifti files
+%CTImage = niftiread("C:\Users\willd\Documents\Markl_Lab\nu-cta-sample-data\preprocessing\corrected_613_resampled_cropped_CTI_standardized.nii");
+CEMRAImage = niftiread("C:\Users\willd\Downloads\COR_CEMRA_TT_1_0s.nii.gz");
+
+% show volume rendering. This may be turned off to save time later on. 
+%volshow(CTImage);
+%volshow(CTMask);
+
+% get voxel size from header
+headerInfo = niftiinfo("C:\Users\willd\Downloads\COR_CEMRA_TT_1_0s.nii.gz");
+CEMRAVoxelSize = headerInfo.PixelDimensions;
+
+% resampling: 
+desiredVoxelSize = [2.5, 2.5, 3];
+
+
+% determine scaling factor
+scalingFactors = CEMRAVoxelSize ./ desiredVoxelSize;
+% calculate the new dimensions
+newDims = round(size(CEMRAImage) .* scalingFactors);
+% resample the image and mask
+resampledCTI = imresize3(CEMRAImage, newDims);
+
+headerInfo.ImageSize = size(resampledCTI);
+headerInfo.PixelDimensions = desiredVoxelSize;
+
+niftiwrite(resampledCTI, 'TESTresampled_CEMRA.nii', headerInfo);
