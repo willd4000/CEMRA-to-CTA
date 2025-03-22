@@ -21,9 +21,9 @@ scalingFactors = CEMRAVoxelSize ./ desiredVoxelSize;
 % calculate the new dimensions
 newDims = round(size(CEMRAImage) .* scalingFactors);
 % resample the image and mask
-resampledCTI = imresize3(CEMRAImage, newDims);
+resampledCEMRA = imresize3(CEMRAImage, newDims);
 
-headerInfo.ImageSize = size(resampledCTI);
+headerInfo.ImageSize = size(resampledCEMRA);
 headerInfo.PixelDimensions = desiredVoxelSize;
 
-niftiwrite(resampledCTI, 'TESTresampled_CEMRA.nii', headerInfo);
+niftiwrite(resampledCEMRA, 'TESTresampled_CEMRA.nii', headerInfo);
